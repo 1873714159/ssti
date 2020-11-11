@@ -17,4 +17,4 @@ fi
 
 echo $$ > ${pidpath}
 
-sleep 300
+sleep 200
