@@ -2,7 +2,12 @@
 
 set -e
 
-#clean /var/log/messages
+# Date: 2020-11-11
+# Author: zoulongbin
+# Description: This scripts function is clean /var/log/messages
+# Version: 1.0
+
+
 LOG_DIR=/var/log
 ROOT_UID=0
 
