@@ -3,7 +3,7 @@
 # Date: 2020-11-22
 # Author: zoulongbin
 # Description: + - * calculator
-# Version: 1.0
+# Version: 2.0
 
 print_usage() {
   echo -e "Please enter an integer\n"
