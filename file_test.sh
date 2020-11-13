@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+unset fstab
+unset zabbixlog
+unset testdir
+unset passwd
+unset shlink
+unset motdsize
+
 fstab="/etc/fstab"
 zabbixlog="/etc/nfs.conf"
 mntdir="/mnt"
