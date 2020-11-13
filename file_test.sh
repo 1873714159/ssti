@@ -9,6 +9,8 @@ shlink="/bin/sh"
 motdsize="/etc/motd"
 
 
+echo -e "\n*** test equal [  ] or [[  ]] ,for example : test -f $fstab equal [ -f $fstab ] or [[ -f $fstab ]] ***\n"
+
 echo -e "\n### test -d (directory) ###"
 test -d $mntdir && echo "`file $mntdir` Exist" || echo "`file $mntdir` Not Exist"
 test -d $testdir && echo "`file $testdir` Exist" || echo "`file $testdir` Not Exist"
