@@ -23,7 +23,6 @@ string02=""
 string03="test"
 string04="file"
 
-
 ###文件测试操作符
 echo -e "\n*** test equal [  ] or [[  ]] ,for example : test -f $fstab equal [ -f $fstab ] or [[ -f $fstab ]] ***\n"
 
