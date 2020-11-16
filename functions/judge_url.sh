@@ -9,7 +9,7 @@
 
 
 function usage() {
-  echo $"Usage: $0 url"
+  echo "Usage: $0 url"
   exit 1
 }
 
