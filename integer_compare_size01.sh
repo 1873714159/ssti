@@ -2,7 +2,7 @@
 
 # Date: 2020-11-13
 # Author: zoulongbin
-# Description: input two integer compare size
+# Description: compare two integer size
 # Version: 1.0
 
 print_error01() { 

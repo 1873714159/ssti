@@ -7,7 +7,6 @@ set -e
 # Description: kill last scripts
 # Version: 1.0
 
-unset pidpath
 pidpath=/tmp/test.pid
 
 if [ -f "${pidpath}" ]
