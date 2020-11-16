@@ -23,6 +23,7 @@ name03() {
    echo "shell function syntax for example 03"
 }
 
-name01
-name02
-name03
+name04() {
+   echo "My name is $1"
+}
+
