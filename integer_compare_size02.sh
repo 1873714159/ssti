@@ -25,8 +25,7 @@ elif [ -z "$firstnum" ]
   then
     echo -e "\n### The first number not null! ###\n"
     exit 1
-elif [ $revalue -ne 0 ]
-  then   
+else [ $revalue -ne 0 ]
     echo -e "\n### Please input integer number! ###\n"
     exit 1
 fi
