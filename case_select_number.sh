@@ -12,11 +12,13 @@ read -p "Input [1-9] number: " num
   exit 1
 }
 
+
 expr $num + 1 > /dev/null 2>&1
 [ $? -ne 0 ] && {
   echo -e "\n### Please input [1-9] number!"
   exit 1
 }
+
 
 case "$num" in
   1)
