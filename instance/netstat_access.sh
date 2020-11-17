@@ -2,7 +2,7 @@
 
 # Date: 2020-11-17
 # Author: zoulongbin
-# Description: netstat command monitoring IP connections greater than 10 , use iptables disable IP
+# Description: netstat command monitoring IP connections 60 second within greater than 10 , use iptables disable IP
 # Version: 1.0
 
 [ -f /tmp/test.log ] && mv /tmp/test.log /tmp/test.log.bak
@@ -20,11 +20,11 @@ do
     count=`echo $line | awk '{print $1}'`
     firewallcount=`iptables -L -n | grep "$ip" | wc -l`
 
-    if [ $count -gt 5 -a $firewallcount -lt 1 ]
+    if [ $count -gt 10 -a $firewallcount -lt 1 ]
       then
         iptables -I INPUT -s $ip -j DROP
         echo "$line is dropped" >> /tmp/droplist_$(date +%Y%m%d).log
     fi
   done
-     sleep 5
+     sleep 60
 done
