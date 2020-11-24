@@ -47,7 +47,7 @@ function MemoryCheck() {
 ### Memory available less than 256M
 if [ $memava_prompt -lt 256000 ]
   then
-    echo -e "${FLASH} ${RED} Available Memory less than 256M ${RES}"
+    echo -e "${FLASH} ${RED} *** Available Memory less than 256M *** ${RES}"
 fi
  
 }
