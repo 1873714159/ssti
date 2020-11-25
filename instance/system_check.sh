@@ -5,6 +5,7 @@
 # Description: login system after prompt information
 # Version: 1.0
 # Permission: chmod 700 /etc/profile.d/SystemCheck.sh
+# System: fit CentOS 6 above version
 
 
 ### 字体颜色
