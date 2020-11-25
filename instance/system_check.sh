@@ -5,7 +5,7 @@
 # Description: login system after prompt information
 # Version: 1.0
 # Permission: chmod 700 /etc/profile.d/SystemCheck.sh
-# System:  CentOS 7 above (include CentOS 7) 
+
 
 ### 字体颜色
 RED='\033[1;31m'
@@ -19,7 +19,8 @@ RES='\033[0m'
 loginhost=`hostname`
 loginhostip=`ip a | egrep "eth0|ens192" | awk -F "[ /]+" 'NR==2 {print $3}'`
 logintime=`date '+%Y-%m-%d %H:%m:%S'`
-sysversion=`cat /etc/redhat-release | awk -F '[ ]+' '{print $4}'`
+sysver=`cat /etc/redhat-release | sed 's/[a-zA-Z ()]//g'`
+sysver_judge=`cat /etc/redhat-release | sed 's/[a-zA-Z ()]//g' | awk -F "[.]" '{print $1}'`
 
 ### CPU infomation
 cputype=`cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq`
@@ -32,8 +33,10 @@ cpuload_prompt=($(uptime | awk -F ":" '{print $NF}'| tr -d ","))
 ### Memory infomation
 memtoal=`free -h | awk -F "[: ]+" 'NR==2 {print $2}'`
 memused=`free -h | awk -F "[: ]+" 'NR==2 {print $3}'`
-memavailable=`free -h | awk -F "[: ]+" 'NR==2 {print $7}'`
-memava_prompt=`free | awk -F "[: ]+" 'NR==2 {print $7}'`
+memavailable_6=`free | awk 'NR==2 {print (($4+$5+$6+$7))/1024"MB"}' | sed 's/\.[0-9]*//g'`
+memava_prompt_6=`free | awk 'NR==2 {print (($4+$5+$6+$7))}'`
+memavailable_7=`free -h | awk -F "[: ]+" 'NR==2 {print $7}'`
+memava_prompt_7=`free | awk -F "[: ]+" 'NR==2 {print $7}'`
 
 ### Disk infomation
 disktotal=`df -h | grep -w '/' | awk '{print $2}'`
@@ -44,6 +47,7 @@ rootdir_prompt=`df -h | grep -w '/' | awk '{print $5}' | tr -d "%"`
 bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 
 ### security infomation
+iptables_status=`/etc/init.d/iptables status | wc -l`
 firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
 selinux_status=`getenforce`
 
@@ -51,8 +55,11 @@ selinux_status=`getenforce`
 function MemoryCheck() {
 
 ### Memory available less than 256M
-[ $memava_prompt -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
-
+if [ $sysver_judge -eq 6 ];then
+  [ $memava_prompt_6 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
+elif [ $sysver_judge -eq 7 ];then
+  [ $memava_prompt_7 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
+fi
 }
 
 
@@ -91,14 +98,49 @@ function  DiskCheck() {
  
 }
 
-echo $abc
+
+function judge_iptables() {
+
+### judge system version running check iptables status
+if [ $sysver_judge -eq 6 ];then
+  [ $iptables_status -gt 1 ] && echo "iptables 状态:          "  running || echo "iptables 状态:          "  not running
+elif [ $sysver_judge -eq 7 ];then
+  echo "iptables 状态:          "  $firewall_status
+fi
+
+}
+
+
+function judge_sysversion() {
+
+### judge system version
+if [ $sysver_judge -eq 6 ];then
+  echo "### sys version:   CentOS ${sysver}"
+elif [ $sysver_judge -eq 7 ];then
+  echo "### sys version:   CentOS ${sysver}"
+fi
+
+}
+
+
+function judge_printmemava() {
+
+### judge system version print memory available
+if [ $sysver_judge -eq 6 ];then
+   echo "内存可用:               "  $memavailable_6
+elif [ $sysver_judge -eq 7 ];then
+   echo "内存可用:               "  $memavailable_7
+fi
+
+}
+
 
 echo
 echo "##############################################"
 echo "### Login time:    ${logintime}"
 echo "### Login host:    ${loginhost}"
 echo "### Login IP:      ${loginhostip}"
-echo "### sys version:   CentOS ${sysversion}"
+judge_sysversion
 echo "### sys runtime:   ${sysruntime} days"
 echo "### scripts path:  /etc/profile.d/SystemCheck.sh"
 echo -e "### ${RED}红色消息(严重)${RES}     ${YELLOW}黄色消息(警告)${RES}"
@@ -114,7 +156,7 @@ echo -e "\n\n"
 
 echo "内存容量:               "  $memtoal
 echo "内存已用:               "  $memused
-echo "内存可用:               "  $memavailable
+judge_printmemava
 MemoryCheck
 echo -e "\n\n"
 
@@ -125,7 +167,7 @@ echo "磁盘/根目录使用百分比:  "  $diskper
 DiskCheck
 echo -e "\n\n"
 
-echo "iptables 状态:          "  $firewall_status
+judge_iptables
 echo "SElinux  状态:          "  $selinux_status
 echo -e "\n\n"
 
