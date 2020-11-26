@@ -56,7 +56,7 @@ bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 selinux_status=`getenforce`
 
 
-function MemoryCheck() {
+function Memory_alert() {
 
 ### Memory available less than 256M
 if [ $sysver_judge -eq 6 ];then
@@ -67,7 +67,7 @@ fi
 }
 
 
-function CPUCheck() {
+function CPU_alert() {
 
 ### two core CPU
 if [ $cpupercore -eq 2 ];then
@@ -94,7 +94,7 @@ fi
 }
 
 
-function  DiskCheck() {
+function  Disk_alert() {
 
 ## root dir and boot dir percent greater than 90%
 [ $rootdir_prompt -gt 90 ] && echo -e "${REDFLASH} "/" root directory percent greater than 90% ${RES}"
@@ -103,7 +103,7 @@ function  DiskCheck() {
 }
 
 
-function judge_iptables() {
+function iptables_judge() {
 
 ### judge system version running check iptables status
 if [ $sysver_judge -eq 6 ];then
@@ -117,7 +117,7 @@ fi
 }
 
 
-function judge_sysversion() {
+function sysversion_judge() {
 
 ### judge system version
 if [ $sysver_judge -eq 6 ];then
@@ -129,7 +129,7 @@ fi
 }
 
 
-function judge_printmemava() {
+function printmemava_judge() {
 
 ### judge system version print memory available
 if [ $sysver_judge -eq 6 ];then
@@ -147,15 +147,13 @@ function CPU_print() {
   echo -e "CPU数量:                 ${GREEN}${cpunumber}${RES}"
   echo -e "CPU每个核数：            ${GREEN}${cpupercore}${RES}"
   echo -e "CPU平均负载:            ${GREEN}$cpuload${RES}"
-  CPUCheck
 }
 
 ### Memory 显示模块
 function Memory_print() {
   echo -e "内存容量:                ${GREEN}${memtoal}${RES}"
   echo -e "内存已用:                ${GREEN}${memused}${RES}"
-  judge_printmemava
-  MemoryCheck
+  printmemava_judge
 }
 
 ### Disk 显示模块
@@ -170,12 +168,11 @@ function Disk_print() {
   echo -e "/boot目录已用:           ${GREEN}${boot_diskuserd}${RES}"
   echo -e "/boot目录可用:           ${GREEN}${boot_diskfree}${RES}"
   echo -e "/boot目录使用百分比:     ${GREEN}${boot_diskper}${RES}"
-  DiskCheck
 }
 
 ### Security 显示模块
 function Security_print() {
-  judge_iptables
+  iptables_judge
   echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
 }
 
@@ -185,7 +182,7 @@ echo "#################################################"
 echo "### Login time:    ${logintime}"
 echo "### Login host:    ${loginhost}"
 echo "### Login IP:      ${loginhostip}"
-judge_sysversion
+sysversion_judge
 echo "### sys runtime:   ${sysruntime} days"
 echo "### scripts path:  /etc/profile.d/SystemCheck.sh"
 echo -e "### ${RED}红色消息(严重)${RES}     ${YELLOW}黄色消息(警告)${RES}"
@@ -193,12 +190,15 @@ echo "#################################################"
 echo -e "\n"
 
 CPU_print
+CPU_alert
 echo -e "\n"
 
 Memory_print
+Memory_alert
 echo -e "\n"
 
 Disk_print
+Disk_alert
 echo -e "\n"
 
 Security_print
