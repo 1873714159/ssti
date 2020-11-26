@@ -48,8 +48,6 @@ rootdir_prompt=`df -h | grep -w '/' | awk '{print $5}' | tr -d "%"`
 bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 
 ### security infomation
-iptables_status=`/etc/init.d/iptables status | wc -l`
-firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
 selinux_status=`getenforce`
 
 
@@ -104,8 +102,10 @@ function judge_iptables() {
 
 ### judge system version running check iptables status
 if [ $sysver_judge -eq 6 ];then
+  iptables_status=`/etc/init.d/iptables status | wc -l`
   [ $iptables_status -gt 1 ] && echo "iptables 状态:          "  running || echo "iptables 状态:          "  not running
 elif [ $sysver_judge -eq 7 ];then
+  firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
   echo "iptables 状态:          "  $firewall_status
 fi
 
@@ -146,29 +146,29 @@ echo "### sys runtime:   ${sysruntime} days"
 echo "### scripts path:  /etc/profile.d/SystemCheck.sh"
 echo -e "### ${RED}红色消息(严重)${RES}     ${YELLOW}黄色消息(警告)${RES}"
 echo "##############################################"
-echo -e "\n\n"
+echo -e "\n"
 
 echo "CPU型号:                " $cputype 
 echo "CPU数量:                " $cpunumber
 echo "CPU每个核数：           " $cpupercore
 echo "CPU平均负载:            " $cpuload
 CPUCheck
-echo -e "\n\n"
+echo -e "\n"
 
 echo "内存容量:               "  $memtoal
 echo "内存已用:               "  $memused
 judge_printmemava
 MemoryCheck
-echo -e "\n\n"
+echo -e "\n"
 
 echo "磁盘/根目录容量:        "  $disktotal
 echo "磁盘/根目录已用:        "  $diskuserd
 echo "磁盘/根目录可用:        "  $diskfree
 echo "磁盘/根目录使用百分比:  "  $diskper
 DiskCheck
-echo -e "\n\n"
+echo -e "\n"
 
 judge_iptables
 echo "SElinux  状态:          "  $selinux_status
-echo -e "\n\n"
+echo -e "\n"
 
