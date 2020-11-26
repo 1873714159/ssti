@@ -160,16 +160,16 @@ function Memory_print() {
 
 ### Disk 显示模块
 function Disk_print() {
-  echo -e "/根目录容量:             ${GREEN}${root_disktotal}${RES}"
-  echo -e "/根目录已用:             ${GREEN}${root_diskuserd}${RES}"
-  echo -e "/根目录可用:             ${GREEN}${root_diskfree}${RES}"
-  echo -e "/根目录使用百分比:       ${GREEN}${root_diskper}${RES}"
+  echo -e "/根目录容量:         ${GREEN}${root_disktotal}${RES}"
+  echo -e "/根目录已用:         ${GREEN}${root_diskuserd}${RES}"
+  echo -e "/根目录可用:         ${GREEN}${root_diskfree}${RES}"
+  echo -e "/根目录使用百分比:   ${GREEN}${root_diskper}${RES}"
   echo
 
-  echo -e "/boot目录容量:           ${GREEN}$boot_disktotal${RES}"
-  echo -e "/boot目录已用:           ${GREEN}${boot_diskuserd}${RES}"
-  echo -e "/boot目录可用:           ${GREEN}${boot_diskfree}${RES}"
-  echo -e "/boot目录使用百分比:     ${GREEN}${boot_diskper}${RES}"
+  echo -e "/boot目录容量:       ${GREEN}$boot_disktotal${RES}"
+  echo -e "/boot目录已用:       ${GREEN}${boot_diskuserd}${RES}"
+  echo -e "/boot目录可用:       ${GREEN}${boot_diskfree}${RES}"
+  echo -e "/boot目录使用百分比: ${GREEN}${boot_diskper}${RES}"
   DiskCheck
 }
 
