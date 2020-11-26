@@ -56,90 +56,87 @@ bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 selinux_status=`getenforce`
 
 
+
+
+###### ****** 报警函数 ****** ######
+
 function Memory_alert() {
-
-### Memory available less than 256M
-if [ $sysver_judge -eq 6 ];then
-  [ $memava_prompt_6 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
-elif [ $sysver_judge -eq 7 ];then
-  [ $memava_prompt_7 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
-fi
+  ### Memory available less than 256M
+  if [ $sysver_judge -eq 6 ];then
+    [ $memava_prompt_6 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
+  elif [ $sysver_judge -eq 7 ];then
+    [ $memava_prompt_7 -lt 256000 ]  && echo -e "${YELLOWFLASH} *** Available Memory less than 256M *** ${RES}"
+  fi
 }
-
 
 function CPU_alert() {
-
-### two core CPU
-if [ $cpupercore -eq 2 ];then
-[ `expr ${cpuload_prompt[0]} \> 3.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 3.0 *** ${RES}"
-[ `expr ${cpuload_prompt[1]} \> 2.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 2.0 *** ${RES}"
-[ `expr ${cpuload_prompt[2]} \> 2.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 2.0 *** ${RES}"
-### four core CPU
-elif [ $cpupercore -eq 4 ];then
-[ `expr ${cpuload_prompt[0]} \> 6.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 6.0 *** ${RES}"
-[ `expr ${cpuload_prompt[1]} \> 4.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 4.0 *** ${RES}"
-[ `expr ${cpuload_prompt[2]} \> 4.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 4.0 *** ${RES}"
-### eight core CPU
-elif [ $cpupercore -eq 8 ];then
-[ `expr ${cpuload_prompt[0]} \> 10.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 10.0 *** ${RES}"
-[ `expr ${cpuload_prompt[1]} \> 8.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 8.0 *** ${RES}"
-[ `expr ${cpuload_prompt[2]} \> 8.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 8.0 *** ${RES}"
-### sixteen core CPU
-elif [ $cpupercore -eq 16 ];then
-[ `expr ${cpuload_prompt[0]} \> 18.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 18.0 *** ${RES}"
-[ `expr ${cpuload_prompt[1]} \> 16.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 16.0 *** ${RES}"
-[ `expr ${cpuload_prompt[2]} \> 16.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 16.0 *** ${RES}"
-fi
-
+  ### two core CPU
+  if [ $cpupercore -eq 2 ];then
+    [ `expr ${cpuload_prompt[0]} \> 3.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 3.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[1]} \> 2.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 2.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[2]} \> 2.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 2.0 *** ${RES}"
+  ### four core CPU
+  elif [ $cpupercore -eq 4 ];then
+    [ `expr ${cpuload_prompt[0]} \> 6.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 6.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[1]} \> 4.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 4.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[2]} \> 4.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 4.0 *** ${RES}"
+  ### eight core CPU
+  elif [ $cpupercore -eq 8 ];then
+    [ `expr ${cpuload_prompt[0]} \> 10.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 10.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[1]} \> 8.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 8.0 *** ${RES}"
+    [ `expr ${cpuload_prompt[2]} \> 8.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 8.0 *** ${RES}"
+  ### sixteen core CPU
+  elif [ $cpupercore -eq 16 ];then
+  [ `expr ${cpuload_prompt[0]} \> 18.0` -eq 1 ] && echo -e "${YELLOWFLASH} *** CPU one minute load greater than 18.0 *** ${RES}"
+  [ `expr ${cpuload_prompt[1]} \> 16.0` -eq 1 ] &&  echo -e "${REDFLASH} *** CPU five minutes load greater than 16.0 *** ${RES}"
+  [ `expr ${cpuload_prompt[2]} \> 16.0` -eq 1 ] && echo -e "${REDFLASH} *** CPU fifteen minutes load greater than 16.0 *** ${RES}"
+  fi
 }
-
 
 function  Disk_alert() {
-
-## root dir and boot dir percent greater than 90%
-[ $rootdir_prompt -gt 90 ] && echo -e "${REDFLASH} "/" root directory percent greater than 90% ${RES}"
-[ $bootdir_prompt -gt 60 ] && echo -e "${REDFLASH} "/" boot directory percent greater than 60% ${RES}"
- 
+  ### root dir and boot dir percent greater than 90%
+  [ $rootdir_prompt -gt 90 ] && echo -e "${REDFLASH} "/" root directory percent greater than 90% ${RES}"
+  [ $bootdir_prompt -gt 60 ] && echo -e "${REDFLASH} "/" boot directory percent greater than 60% ${RES}"
 }
 
+
+
+
+###### ****** 系统分辨函数 ****** ######
 
 function iptables_judge() {
-
-### judge system version running check iptables status
-if [ $sysver_judge -eq 6 ];then
-  iptables_status=`/etc/init.d/iptables status | wc -l`
-  [ $iptables_status -gt 1 ] && echo -e "iptables 状态:           ${GREEN}running${RES} "|| echo -e "iptables 状态:           ${GREEN}not running${RES}"
-elif [ $sysver_judge -eq 7 ];then
-  firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
-  echo -e "iptables 状态:           ${GREEN}${firewall_status}${RES}"
-fi
-
+  ### judge system version running check iptables status
+  if [ $sysver_judge -eq 6 ];then
+    iptables_status=`/etc/init.d/iptables status | wc -l`
+    [ $iptables_status -gt 1 ] && echo -e "iptables 状态:           ${GREEN}running${RES} "|| echo -e "iptables 状态:           ${GREEN}not running${RES}"
+  elif [ $sysver_judge -eq 7 ];then
+    firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
+    echo -e "iptables 状态:           ${GREEN}${firewall_status}${RES}"
+  fi
 }
-
 
 function sysversion_judge() {
-
-### judge system version
-if [ $sysver_judge -eq 6 ];then
-  echo "### sys version:   CentOS ${sysver}"
-elif [ $sysver_judge -eq 7 ];then
-  echo "### sys version:   CentOS ${sysver}"
-fi
-
+  ### judge system version
+  if [ $sysver_judge -eq 6 ];then
+    echo "### sys version:   CentOS ${sysver}"
+  elif [ $sysver_judge -eq 7 ];then
+    echo "### sys version:   CentOS ${sysver}"
+  fi
 }
-
 
 function printmemava_judge() {
-
-### judge system version print memory available
-if [ $sysver_judge -eq 6 ];then
-   echo -e "内存可用:                ${GREEN}${memavailable_6}${RES}"
-elif [ $sysver_judge -eq 7 ];then
-   echo -e "内存可用:                ${GREEN}${memavailable_7}${RES} "
-fi
-
+  ### judge system version print memory available
+  if [ $sysver_judge -eq 6 ];then
+     echo -e "内存可用:                ${GREEN}${memavailable_6}${RES}"
+  elif [ $sysver_judge -eq 7 ];then
+     echo -e "内存可用:                ${GREEN}${memavailable_7}${RES} "
+  fi
 }
 
+
+
+
+###### ****** 显示函数 ****** ######
 
 ### CPU 显示模块
 function CPU_print() {
@@ -156,19 +153,22 @@ function Memory_print() {
   printmemava_judge
 }
 
-### Disk 显示模块
-function Disk_print() {
+### root directory 显示模块
+function Disk_root_print() {
   echo -e "/根目录容量:             ${GREEN}${root_disktotal}${RES}"
   echo -e "/根目录已用:             ${GREEN}${root_diskuserd}${RES}"
   echo -e "/根目录可用:             ${GREEN}${root_diskfree}${RES}"
   echo -e "/根目录使用百分比:       ${GREEN}${root_diskper}${RES}"
-  echo
+}
 
+### boot directory 显示模块
+function Disk_boot_print() {
   echo -e "/boot目录容量:           ${GREEN}$boot_disktotal${RES}"
   echo -e "/boot目录已用:           ${GREEN}${boot_diskuserd}${RES}"
   echo -e "/boot目录可用:           ${GREEN}${boot_diskfree}${RES}"
   echo -e "/boot目录使用百分比:     ${GREEN}${boot_diskper}${RES}"
 }
+
 
 ### Security 显示模块
 function Security_print() {
@@ -176,6 +176,10 @@ function Security_print() {
   echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
 }
 
+
+
+
+###### ****** 主程序 ****** ######
 
 echo
 echo "#################################################"
@@ -197,7 +201,9 @@ Memory_print
 Memory_alert
 echo -e "\n"
 
-Disk_print
+Disk_root_print
+echo
+Disk_boot_print
 Disk_alert
 echo -e "\n"
 
