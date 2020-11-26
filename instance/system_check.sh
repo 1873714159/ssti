@@ -180,7 +180,7 @@ function Security_print() {
   iptables_judge
   echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
   echo -e "用户最大进程连接数限制:  ${GREEN}${max_user_processes}${RES}"
-  echo -e "当前进程连接数:          ${GREEN}${tcp_connection_num}${RES}"
+  echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num}${RES}"
 }
 
 
