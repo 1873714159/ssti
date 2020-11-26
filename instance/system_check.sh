@@ -54,7 +54,8 @@ bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 
 ### security infomation
 selinux_status=`getenforce`
-
+max_user_processes=`ulimit -u`
+tcp_connection_num=`netstat -an | egrep "^tcp|^udp" | wc -l`
 
 
 
@@ -99,6 +100,11 @@ function  Disk_alert() {
   [ $bootdir_prompt -gt 60 ] && echo -e "${REDFLASH} "/" boot directory percent greater than 60% ${RES}"
 }
 
+function Security_alert() {
+  ### user maxmum processes less than 1024 
+  [ $max_user_processes -lt 1024 ] && echo -e "${YELLOWFLASH} *** user maxmum processes less than 1024 ${RES}"
+  [ $tcp_connection_num -gt 1024 ] && echo -e "${YELLOWFLASH} *** tcp connection number greater than 1024 ${RES}"
+}
 
 
 
@@ -132,7 +138,6 @@ function printmemava_judge() {
      echo -e "内存可用:                ${GREEN}${memavailable_7}${RES} "
   fi
 }
-
 
 
 
@@ -174,8 +179,9 @@ function Disk_boot_print() {
 function Security_print() {
   iptables_judge
   echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
+  echo -e "用户最大进程连接数限制:  ${GREEN}${max_user_processes}${RES}"
+  echo -e "当前进程连接数:          ${GREEN}${tcp_connection_num}${RES}"
 }
-
 
 
 
@@ -208,5 +214,6 @@ Disk_alert
 echo -e "\n"
 
 Security_print
+Security_alert
 echo -e "\n"
 
