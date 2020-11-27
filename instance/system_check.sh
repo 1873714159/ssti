@@ -55,7 +55,8 @@ bootdir_prompt=`df -h | grep -w '/boot' | awk '{print $5}' | tr -d "%"`
 ### security infomation
 selinux_status=`getenforce`
 max_user_processes=`ulimit -u`
-tcp_connection_num=`netstat -an | egrep "^tcp|^udp" | wc -l`
+tcp_connection_num01=`netstat -an | egrep "^tcp|^udp" | wc -l`
+tcp_connection_num02=`ss -an | egrep "^tcp|^udp" | wc -l`
 
 
 
@@ -96,14 +97,25 @@ function CPU_alert() {
 
 function  Disk_alert() {
   ### root dir and boot dir percent greater than 90%
-  [ $rootdir_prompt -gt 90 ] && echo -e "${REDFLASH} "/" root directory percent greater than 90% ${RES}"
-  [ $bootdir_prompt -gt 60 ] && echo -e "${REDFLASH} "/" boot directory percent greater than 60% ${RES}"
+  [ $rootdir_prompt -gt 90 ] && echo -e "${REDFLASH} *** "/" root directory percent greater than 90% *** ${RES}"
+  [ $bootdir_prompt -gt 60 ] && echo -e "${REDFLASH} *** "/" boot directory percent greater than 60% *** ${RES}"
 }
 
 function Security_alert() {
   ### user maxmum processes less than 1024 
-  [ $max_user_processes -lt 1024 ] && echo -e "${YELLOWFLASH} *** user maxmum processes less than 1024 ${RES}"
-  [ $tcp_connection_num -gt 1024 ] && echo -e "${YELLOWFLASH} *** tcp connection number greater than 1024 ${RES}"
+  [ $max_user_processes -lt 1024 ] && echo -e "${YELLOWFLASH} *** user maxmum processes less than 1024 *** ${RES}"
+  ### TCP connnection greater than 1024 
+  if [ -f /usr/bin/netstat -o /bin/netstat ];then
+    [ $tcp_connection_num01 -gt 1024 ] && echo -e "${YELLOWFLASH} *** tcp connection number greater than 1024 *** ${RES}"
+  elif [ -f /usr/sbin/ss ];then
+    [ $tcp_connection_num02 -gt 1024 ] && echo -e "${YELLOWFLASH} *** tcp connection number greater than 1024 *** ${RES}"
+  fi  
+  ### judge iptables running
+  if [ $sysver_judge -eq 6 ];then
+    [ $iptables_status -gt 1 ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
+  elif [ $sysver_judge -eq 7 ];then
+    [ "$firewall_status" == "inactive" ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
+  fi
 }
 
 
@@ -136,6 +148,15 @@ function printmemava_judge() {
      echo -e "内存可用:                ${GREEN}${memavailable_6}${RES}"
   elif [ $sysver_judge -eq 7 ];then
      echo -e "内存可用:                ${GREEN}${memavailable_7}${RES} "
+  fi
+}
+
+function tcpcommand_judge() {
+  ### judge tcp command netstat and ss
+  if [ -f /usr/bin/netstat -o /bin/netstat ];then
+     echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num01}${RES}"
+  elif [ -f /usr/sbin/ss ];then
+     echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num02}${RES}"
   fi
 }
 
@@ -180,7 +201,7 @@ function Security_print() {
   iptables_judge
   echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
   echo -e "用户最大进程连接数限制:  ${GREEN}${max_user_processes}${RES}"
-  echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num}${RES}"
+  tcpcommand_judge
 }
 
 
