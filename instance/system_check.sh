@@ -112,7 +112,7 @@ function Security_alert() {
   fi  
   ### judge iptables running
   if [ $sysver_judge -eq 6 ];then
-    [ $iptables_status -gt 1 ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
+    [ $iptables_status -le 1 ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
   elif [ $sysver_judge -eq 7 ];then
     [ "$firewall_status" == "inactive" ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
   fi
