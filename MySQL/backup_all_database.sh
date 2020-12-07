@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DATE: 2020-12-07
+# Date: 2020-12-07
 # Author: zoulongbin
 # Description: That backup single host MySQL all databases
 # Version：1.0
