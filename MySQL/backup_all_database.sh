@@ -10,11 +10,11 @@ source /etc/profile
 source /etc/bashrc
 
 MySQL_USER="root"
-MySQL_PASSWORD="#AAAaaa111#"
+MySQL_PASSWORD="123456"
 MySQL_mysqldump="/usr/bin/mysqldump"
 MySQL_mysql="/usr/bin/mysql"
 MySQL_BACKUP_PATH="/data/MySQL"
-Email_NAME='zouh130326@hanslaser.com'
+Email_NAME='123456@qq.com'
 DATE_NAME=$(date +%Y%m%d)
 
 [ -d /data/MySQL ] || mkdir -p /data/MySQL
