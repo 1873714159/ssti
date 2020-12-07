@@ -2,7 +2,7 @@
 
 # DATE: 2020-12-07
 # Author: zoulongbin
-# Description: That backup MySQL all databases
+# Description: That backup single host MySQL all databases
 # Version：1.0
 
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
@@ -11,8 +11,6 @@ source /etc/bashrc
 
 MySQL_USER="root"
 MySQL_PASSWORD="#AAAaaa111#"
-MySQL_HOST=i"localhost"
-MySQL_PORT=3306
 MySQL_mysqldump="/usr/bin/mysqldump"
 MySQL_mysql="/usr/bin/mysql"
 MySQL_BACKUP_PATH="/data/MySQL"
