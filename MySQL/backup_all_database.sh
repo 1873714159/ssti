@@ -31,7 +31,7 @@ ${MySQL_mysql} -u${MySQL_USER} -p${MySQL_PASSWORD} -e "show databases;" > /dev/n
 }
 
 
-${MySQL_mysqldump} -u${MySQL_USER} -p${MySQL_PASSWORD} --all-databases -B --flush-privileges --single-transaction --triggers --routines --events --hex-blob | gzip > ${MySQL_BACKUP_PATH}/mysql_bak_${DATE_NAME}.sql.gz
+${MySQL_mysqldump} -u${MySQL_USER} -p${MySQL_PASSWORD} --all-databases --flush-privileges --single-transaction --triggers --routines --events --hex-blob | gzip > ${MySQL_BACKUP_PATH}/mysql_bak_${DATE_NAME}.sql.gz
 mysqlcheck=$?
 
 sleep 2
