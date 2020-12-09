@@ -116,6 +116,10 @@ function Security_alert() {
   elif [ $sysver_judge -eq 7 ];then
     [ "$firewall_status" == "inactive" ] && echo -e "${YELLOWFLASH} *** iptables is no running *** ${RES}"
   fi
+  ### judge selinux turn off
+  if [[ "$selinux_status" == "Enforcing" ]];then
+     echo -e "${YELLOWFLASH} *** SElinux is running *** ${RES}"
+  fi
 }
 
 
@@ -126,10 +130,10 @@ function iptables_judge() {
   ### judge system version running check iptables status
   if [ $sysver_judge -eq 6 ];then
     iptables_status=`/etc/init.d/iptables status | wc -l`
-    [ $iptables_status -gt 1 ] && echo -e "iptables 状态:           ${GREEN}running${RES} "|| echo -e "iptables 状态:           ${GREEN}not running${RES}"
+    [ $iptables_status -gt 1 ] && echo -e "iptables 状态:           ${GREEN}running${RES} "|| echo -e "iptables 状态:           ${RED}not running${RES}"
   elif [ $sysver_judge -eq 7 ];then
     firewall_status=`systemctl status firewalld | awk 'NR==3 {print $2}'`
-    echo -e "iptables 状态:           ${GREEN}${firewall_status}${RES}"
+    [[ "$firewall_status" == "active" ]] && echo -e "iptables 状态:           ${GREEN}${firewall_status}${RES}" || echo -e "iptables 状态:           ${RED}${firewall_status}${RES}"
   fi
 }
 
@@ -153,7 +157,7 @@ function printmemava_judge() {
 
 function tcpcommand_judge() {
   ### judge tcp command netstat and ss
-  if [ -f /usr/bin/netstat -o /bin/netstat ];then
+  if [ -f /usr/bin/netstat -o -f /bin/netstat ];then
      echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num01}${RES}"
   elif [ -f /usr/sbin/ss ];then
      echo -e "当前TCP连接数:           ${GREEN}${tcp_connection_num02}${RES}"
@@ -199,7 +203,7 @@ function Disk_boot_print() {
 ### Security 显示模块
 function Security_print() {
   iptables_judge
-  echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
+  [[ "$selinux_status" == "Enforcing" ]] && echo -e "SElinux  状态:           ${RED}${selinux_status}${RES}" || echo -e "SElinux  状态:           ${GREEN}${selinux_status}${RES}"
   echo -e "用户最大进程连接数限制:  ${GREEN}${max_user_processes}${RES}"
   tcpcommand_judge
 }
