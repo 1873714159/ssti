@@ -1,5 +1,5 @@
 **Linux Shell Scripts**
 
-You are copy shell scripts operation:
+You can copy shell scripts:
 
 git clone https://github.com/tmpyun/shellscripts.git
