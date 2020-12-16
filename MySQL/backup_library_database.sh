@@ -2,7 +2,7 @@
 
 # Date: 2020-12-07
 # Author: zoulongbin
-# Description: That backup single host  MySQL library databases
+# Description: That backup single host  MySQL library databases at everyday,but everyweek to cover
 # Version: 1.0
 
 # insert into /etc/my.cnf
@@ -20,7 +20,8 @@ source /etc/bashrc
 
 MySQL_mysql="/usr/bin/mysql"
 MySQL_mysqldump="/usr/bin/mysqldump"
-MySQL_backup_path="/data/MySQL"
+MySQL_backup_path="/data/MySQL/library"
+Comm_find="/usr/bin/find"
 Date_name=$(date +%Y%m%d)
 
 [ -d ${MySQL_backup_path} ] || mkdir -p ${MySQL_backup_path}
@@ -32,5 +33,10 @@ Date_name=$(date +%Y%m%d)
 MySQL_databases=$(mysql -e "show databases;" | sed '1d' | egrep -v "information_schema|performance_schema|sys")
 for dbname in ${MySQL_databases}
 do
-  ${MySQL_mysqldump} -B --master-data=2 --single-transaction ${dbname} | gzip > ${MySQL_backup_path}/${dbname}_${Date_name}.sql.gz
+  mkdir -p ${MySQL_backup_path}/${dbname}
+  ${MySQL_mysqldump} -B --single-transaction --triggers --routines --events --hex-blob ${dbname}|gzip > ${MySQL_backup_path}/${dbname}/${dbname}_${Date_name}.sql.gz
 done
+
+sleep 2
+
+${Comm_find} ${MySQL_backup_path}/ -type f -name "*.sql.gz" -mtime +6 | xargs rm -rf
