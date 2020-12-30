@@ -15,7 +15,7 @@ RED='\033[1;31;5m'
 RES='\033[0m'
 MYSQL_COUNT=$(netstat -tlunp | grep mysqld | wc -l)
 MYSQL_PWD=$(pwd)
-MYSQL_PACK="mysql-8.0.15-linux-glibc2.12-x86_64.tar.xz"
+MYSQL_PACK="mysql-5.7.31-linux-glibc2.12-x86_64.tar.gz"
 MYSQL_PATH="/usr/local/${MYSQL_PACK//-linux*/}"
 MYSQL_LINK="/usr/local/mysql"
 
@@ -30,11 +30,13 @@ if [ -d /usr/local/mysql* ];then
    echo -e "${RED} MySQL directory is exits ${RES}"
    exit 1
 fi
+
 ### check MySQL binary pack if exist
 if [ ! -f ${MYSQL_PWD}/${MYSQL_PACK} ];then
    echo -e "${RED} Current directory is not MySQL binary pack,Please copy it ${RES}"
    exit 1
 fi
+
 
 ### install MySQL depend pack
 yum -y install ncurses-devel libaio-devel gcc gcc++ > /dev/null 2>&1
@@ -62,7 +64,6 @@ cat << EOF > /etc/my.cnf
 
 #server-id=1
 
-mysqlx_socket=/tmp/mysqlx.sock
 basedir=/usr/local/mysql
 datadir=/usr/local/mysql/data
 socket=/tmp/mysql.sock
@@ -74,7 +75,6 @@ character-set-server=utf8mb4
 max_connections=500
 max_connect_errors=1000
 port=3306
-mysqlx_port=33060
 EOF
 
 ### create MySQL virtual user
