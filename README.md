@@ -20,7 +20,7 @@
 `git push -u origin master`
 
 #### 修改远程git仓库的地址
-`git remote add origin https://github.com/tmpyun/java.git`
+`git remote add origin https://github.com/tmpyun/shellscripts.git`
 
 #### 查看与撤消工作区到缓存区之前（git add命令之前的操作）
 1. `git diff`
